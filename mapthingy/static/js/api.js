@@ -1,4 +1,4 @@
-var API = (function() {
+var API = (function () {
     var _socket;
 
 
@@ -7,11 +7,11 @@ var API = (function() {
         _socket = new WebSocket("ws://" + path);
 
         // Setup event handlers
-        _socket.onopen = function(event) {
+        _socket.onopen = function (event) {
             console.log("Connected to API server!");
 
             // Listen for messages
-            _socket.onmessage = function(event) {
+            _socket.onmessage = function (event) {
                 var data = JSON.parse(event.data);
 
                 if (data.msg === "position") {
@@ -24,21 +24,21 @@ var API = (function() {
             };
 
             // Listen for socket being closed
-            _socket.onclose = function() {
+            _socket.onclose = function () {
                 console.log("Connection to API server lost");
-            }
+            };
 
             connectCallback();
-        }
+        };
     }
 
 
     return {
-        start: function(path, connectCallback, positionCallback) {
-            connectApi(path, connectCallback, positionCallback)
+        start: function (path, connectCallback, positionCallback) {
+            connectApi(path, connectCallback, positionCallback);
         },
 
-        getHostPosition: function(hostname, callback) {
+        getHostPosition: function (hostname, callback) {
             _socket.send(JSON.stringify({
                 msg: 'getPosition',
                 payload: hostname

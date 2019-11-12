@@ -8,8 +8,9 @@ import json
 ROOT = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_DIR = os.path.join(ROOT, 'templates')
 STATIC_DIR = os.path.join(ROOT, 'static')
-GOOGLE_MAPS_KEY = 'AIzaSyBZDgontArVnzdUGccBScTPYMQ7pzZnzas'
-FREEGEOIP_URL_PATTERN = "http://freegeoip.net/json/%(host)s"
+GOOGLE_MAPS_KEY = 'AIzaSyB98jqPlqa41_FhMKQJfTU_ZA1aC04pjcs'
+APISTACK_KEY = 'abfc98d93414c81cc09e7195a04cbd64'
+APISTACK_URL_PATTERN = "http://api.ipstack.com/%(host)s&access_key=%(access_key)s"
 
 
 class APIHandler(tornado.websocket.WebSocketHandler):
@@ -37,7 +38,8 @@ class APIHandler(tornado.websocket.WebSocketHandler):
 
     def get_position(self, host_or_ip):
         client = httpclient.HTTPClient()
-        res = client.fetch(FREEGEOIP_URL_PATTERN % {'host': host_or_ip})
+        api_request_url = APISTACK_URL_PATTERN % {'host': host_or_ip, 'access_key': APISTACK_KEY}
+        res = client.fetch(api_request_url)
         self.write_message({
             'msg': 'position',
             'payload': res.body.decode('utf-8')
